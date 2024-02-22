@@ -6,16 +6,12 @@ import com.devblack21.rinha.backend.crebito.controller.dto.ExtractResponse;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
-import io.cucumber.java.BeforeAll;
 import io.cucumber.java.ParameterType;
 import io.cucumber.java.pt.Dado;
 import io.cucumber.java.pt.E;
 import io.cucumber.java.pt.Entao;
 import io.cucumber.java.pt.Quando;
 import io.github.devblack21.logging.LogBit;
-import io.github.devblack21.logging.configuration.LogBitConfiguration;
-import io.github.devblack21.logging.enginer.DefaultEngineLogBit;
-import io.github.devblack21.logging.enginer.EngineLogBit;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.StringUtils;
@@ -36,14 +32,6 @@ public class BaseStep {
 
     private final TestContext testContext;
 
-
-    @BeforeAll
-    public static void beforeAll() {
-        final LogBitConfiguration logBitConfiguration = new LogBitConfiguration("Rinha-Backend",
-                "DevBlack21", "Api");
-        final EngineLogBit abstractEngineBitLogger = new DefaultEngineLogBit(logBitConfiguration);
-        LogBit.configure(abstractEngineBitLogger);
-    }
     @Before
     public void before() {
         this.eventProducer.userDeleteAll();

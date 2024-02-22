@@ -2,10 +2,6 @@ package com.devblack21.rinha.backend.crebito.bdd.runner;
 
 import io.cucumber.junit.Cucumber;
 import io.cucumber.junit.CucumberOptions;
-import io.github.devblack21.logging.LogBit;
-import io.github.devblack21.logging.configuration.LogBitConfiguration;
-import io.github.devblack21.logging.enginer.DefaultEngineLogBit;
-import io.github.devblack21.logging.enginer.EngineLogBit;
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 
@@ -29,12 +25,6 @@ import org.junit.runner.RunWith;
 public class JUnitRunner {
 
     @BeforeClass
-    public static void start() {
-        final LogBitConfiguration logBitConfiguration = new LogBitConfiguration("Rinha-Backend",
-                "DevBlack21", "Api");
-        final EngineLogBit abstractEngineBitLogger = new DefaultEngineLogBit(logBitConfiguration);
-        LogBit.configure(abstractEngineBitLogger);
-        LogBit.info("BDD_START", "Executando BDD..");
-    }
+    public static void start() {}
 
 }
