@@ -7,4 +7,7 @@ import java.util.Set;
 public interface UserAccountRepository {
     UserAccountEntity save(final UserAccountEntity userAccountEntity);
     UserAccountEntity findBy_id(final byte id);
+
+    void deleteAll();
 }
+

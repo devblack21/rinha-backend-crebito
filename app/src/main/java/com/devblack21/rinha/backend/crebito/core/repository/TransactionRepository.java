@@ -7,4 +7,6 @@ import java.util.Set;
 public interface TransactionRepository {
     TransactionEntity save(final TransactionEntity transactionEntity);
     Set<TransactionEntity> findFirst10ByUserAccountIdOrderByDateTimeDesc(final byte id);
+
+    void deleteAll();
 }

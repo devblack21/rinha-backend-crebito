@@ -1,7 +1,8 @@
 package com.devblack21.rinha.backend.crebito.controller;
 
+import com.devblack21.rinha.backend.crebito.controller.dto.ExtractResponse;
 import com.devblack21.rinha.backend.crebito.core.repository.TransactionRepository;
-import io.github.devblack21.logging.LogBit;
+import com.devblack21.rinha.backend.crebito.repository.entity.TransactionEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +12,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/clientes")
@@ -21,12 +26,9 @@ public class ExtractController {
     @GetMapping("/{id}/extrato")
     public ResponseEntity<?> get(final @PathVariable("id") int id) {
 
-        //controle de memoria -> retirar
-        Runtime runtime = Runtime.getRuntime();
-        LogBit.info("MAX_MEMORY", "Máximo de memória", humanReadableByteCountSI(runtime.maxMemory()));
-        LogBit.info("FREE_MEMORY", "Memória livre", humanReadableByteCountSI(runtime.freeMemory()));
+        var transactions = transactionRepository.findFirst10ByUserAccountIdOrderByDateTimeDesc((byte) id);
 
-        return ResponseEntity.ok(transactionRepository.findFirst10ByUserAccountIdOrderByDateTimeDesc((byte) id));
+        return ResponseEntity.ok(generate(transactions));
     }
 
 
@@ -40,6 +42,28 @@ public class ExtractController {
             ci.next();
         }
         return String.format("%.1f %cB", bytes / 1000.0, ci.current());
+    }
+
+    private ExtractResponse generate(final Set<TransactionEntity> transactionEntities) {
+
+        final ExtractResponse.SaldoDTO saldoDTO = new ExtractResponse.SaldoDTO(
+                1000, LocalDateTime.now(), 10000);
+
+        final List<ExtractResponse.TransactionDTO> list = new ArrayList<>();
+
+        transactionEntities.forEach(transactionEntity -> {
+            final ExtractResponse.TransactionDTO transactionDTO = new ExtractResponse.TransactionDTO(
+                    transactionEntity.getValor(),
+                    transactionEntity.getTipo(),
+                    transactionEntity.getDescricao(),
+                    transactionEntity.getDateTime()
+            );
+            list.add(transactionDTO);
+        });
+
+
+
+        return new ExtractResponse(saldoDTO, list);
     }
 
 }
