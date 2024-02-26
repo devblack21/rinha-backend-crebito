@@ -29,21 +29,20 @@ import static org.hamcrest.Matchers.*;
 public class BaseStep {
 
     private final EventProducer eventProducer;
-
     private final TestContext testContext;
 
     @Before
     public void before() {
-        this.eventProducer.userDeleteAll();
-        this.eventProducer.trasactionsDeleteAll();
+        this.eventProducer.deleteAll();
         this.testContext.setUuid(UUID.randomUUID());
         this.testContext.setUserId(0);
-        LogBit.logInfoStart("BASE_STEP_INIT", "Inicializando BDD..", testContext.getUuid());
+        LogBit.logInfoStart("BASE_STEP_INIT", "Inicializando BDD...",
+                testContext.getUuid());
     }
 
     @After
     public void after() {
-        LogBit.logInfoFinish("BASE_STEP_FINISH", "Finalizando BDD..");
+        LogBit.logInfoFinish("BASE_STEP_FINISH", "Finalizando BDD...");
     }
 
 
@@ -76,20 +75,21 @@ public class BaseStep {
     @SneakyThrows
     @Dado("que tenho um cliente com saldo de {int} e limite de {int}")
     public void addClient(final int saldo, final int limite) {
+        this.eventProducer.deleteAll();
         this.testContext.setSaldo(saldo);
         this.testContext.setLimite(limite);
-        this.eventProducer.createUser(this.testContext);
+        var user = this.eventProducer.createUser(this.testContext);
+        this.testContext.setUserId((Integer) user.get("id"));
     }
 
     @Dado("que não tenho nenhum cliente cadastrado")
     public void nenhumClienteCadastrado() {
-        this.eventProducer.userDeleteAll();
+        this.eventProducer.deleteAll();
     }
 
     @SneakyThrows
     @E("envio um cadastro de transação de {string} no valor de {integerValue}")
     public void envioTransacaoCredito(final String tipo, final Integer valor) {
-        this.testContext.setDescricao(this.testContext.getUuid().toString().substring(0,9));
         this.postTransaction(convertTipo(tipo), valor);
     }
 
@@ -98,7 +98,6 @@ public class BaseStep {
     public void envioTransacaoCredito(final String descricao) {
         this.testContext.setDescricao(filter(descricao));
     }
-
 
     @SneakyThrows
     private void postTransaction(final String transactionType, final Integer valor) {
@@ -118,13 +117,14 @@ public class BaseStep {
             final TestContext testContextTemp = new TestContext();
             testContextTemp.setUserId(this.testContext.getUserId());
             testContextTemp.setUuid(this.testContext.getUuid());
-            this.testContext.setDescricao(this.testContext.getUuid().toString().substring(0,9));
+            testContextTemp.setDescricao(this.testContext.getUuid().toString().substring(0,9));
             testContextTemp.setValor(Integer.parseInt(cell.get(0)));
             testContextTemp.setTipo(cell.get(1));
             contexts.add(testContextTemp);
         }
 
-        contexts.stream().parallel().forEach(context -> new Thread(() -> eventProducer.postTransaction(context)).run());
+        contexts.stream().parallel().forEach(context ->
+                new Thread(() -> eventProducer.postTransaction(context)).run());
     }
 
     @E("consulto o extrato do cliente")
@@ -136,25 +136,29 @@ public class BaseStep {
     @Entao("valido se a transação foi realizada")
     public void validaTransacaoRealizada() {
         assertThat(this.testContext.getTransactionResponse(), notNullValue());
-        assertThat(this.testContext.getTransactionResponse().getStatusCode().value(), equalTo(200));
+        assertThat(this.testContext.getTransactionResponse().getStatusCode().value(),
+                equalTo(200));
     }
 
     @Entao("valido que a transação não foi realizada")
     public void validaTransacaoNaoRealizada() {
         assertThat(this.testContext.getTransactionResponse(), notNullValue());
-        assertThat(this.testContext.getTransactionResponse().getStatusCode().value(), not(equalTo(200)));
+        assertThat(this.testContext.getTransactionResponse().getStatusCode().value(),
+                not(equalTo(200)));
     }
 
     @Entao("valido que o status code da transacao é igual a {int}")
     public void validaStatusCodeTrasacao(final int status) {
         assertThat(this.testContext.getTransactionResponse(), notNullValue());
-        assertThat(this.testContext.getTransactionResponse().getStatusCode().value(), equalTo(status));
+        assertThat(this.testContext.getTransactionResponse().getStatusCode().value(),
+                equalTo(status));
     }
 
     @Entao("valido que o status code da consulta é igual a {int}")
     public void validaStatusCodeExtrato(final int status) {
-        assertThat(this.testContext.getTransactionResponse(), notNullValue());
-        assertThat(this.testContext.getTransactionResponse().getStatusCode().value(), equalTo(status));
+        assertThat(this.testContext.getExtractResponse(), notNullValue());
+        assertThat(this.testContext.getExtractResponse().getStatusCode().value(),
+                equalTo(status));
     }
 
     @Entao("valido a conformidade dos dados no extrato")
@@ -169,21 +173,21 @@ public class BaseStep {
 
         final Map<String, Object> transactionRequest = this.testContext.getTransactionRequest();
         assertThat(extractResponse, notNullValue());
-        assertThat(extractResponse.transactions().get(0).tipo(), equalTo(String.valueOf(transactionRequest.get("tipo")).charAt(0)));
-        assertThat(extractResponse.transactions().get(0).descricao(), equalTo(String.valueOf(transactionRequest.get("descricao"))));
-        assertThat(extractResponse.transactions().get(0).valor(), equalTo(Integer.valueOf(String.valueOf(transactionRequest.get("valor")))));
+        assertThat(extractResponse.transactions().get(0).tipo(),
+                equalTo(String.valueOf(transactionRequest.get("tipo")).charAt(0)));
+        assertThat(extractResponse.transactions().get(0).descricao(),
+                equalTo(String.valueOf(transactionRequest.get("descricao"))));
+        assertThat(extractResponse.transactions().get(0).valor(),
+                equalTo(Integer.valueOf(String.valueOf(transactionRequest.get("valor")))));
     }
 
     @Entao("valido que não existe a transação cadastrada no extrato")
     public void validaInexistenciaDaTransacaoNoExtrato() {
 
         final ExtractResponse extractResponse = this.testContext.getExtractResponse().getBody();
-        final Map<String, Object> transactionRequest = this.testContext.getTransactionRequest();
 
         assertThat(extractResponse, notNullValue());
-        assertThat(extractResponse.transactions().get(0).tipo(), not(equalTo(String.valueOf(transactionRequest.get("tipo")).charAt(0))));
-        assertThat(extractResponse.transactions().get(0).descricao(), not(equalTo(String.valueOf(transactionRequest.get("descricao")))));
-        assertThat(extractResponse.transactions().get(0).valor(), not(equalTo(Integer.valueOf(String.valueOf(transactionRequest.get("valor"))))));
+        assertThat(extractResponse.transactions(), hasSize(0));
     }
 
     @Entao("valido no extrato se o saldo do cliente é igual a {int}")

@@ -20,6 +20,8 @@ Funcionalidade: Concorrencia de Transações
       | 100 | d |
       | 100 | d |
       | 100 | d |
+      | 50  | d |
+      | 100 | d |
       | 100 | d |
       | 100 | d |
       | 50  | d |
@@ -27,22 +29,20 @@ Funcionalidade: Concorrencia de Transações
       | 100 | d |
       | 100 | d |
       | 100 | d |
-      | 100 | d |
-      | 100 | d |
-      | 100 | d |
-      | 100 | d |
-      | 100 | d |
       | 50  | d |
       | 100 | d |
       | 100 | d |
-      | 100 | d |
+      | 50  | d |
+      | 50  | d |
+      | 50  | d |
     Entao consulto o extrato do cliente
     E valido no extrato se o saldo do cliente é igual a <saldoEsperado>
     Exemplos:
       | saldo | limite | saldoEsperado |
       | 0     | 1000   | -1000         |
       | 0     | 50     | -50           |
-      | 5     | 50     | 5             |
+      | 5     | 50     | -45           |
       | 150   | 50     | -50           |
       | 200   | 1000   | -1000         |
       | 0     | 1055   | -1050         |
+      | 500   | 522    | -500          |

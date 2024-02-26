@@ -1,7 +1,7 @@
 package com.devblack21.rinha.backend.crebito.bdd.core;
 
 import com.devblack21.rinha.backend.crebito.controller.dto.ExtractResponse;
-import com.devblack21.rinha.backend.crebito.controller.dto.TransactionResponse;
+import com.devblack21.rinha.backend.crebito.domain.EnvioTransacao;
 import io.cucumber.spring.ScenarioScope;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,7 +29,7 @@ public class TestContext {
     private int saldoEsperado;
     private Map<String, Object> transactionRequest;
     private ResponseEntity<ExtractResponse> extractResponse;
-    private ResponseEntity<TransactionResponse> transactionResponse;
+    private ResponseEntity<EnvioTransacao> transactionResponse;
 
 
 }

@@ -1,27 +1,34 @@
 package com.devblack21.rinha.backend.crebito.repository.entity;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.Transient;
-import org.springframework.data.mongodb.core.mapping.DBRef;
-import org.springframework.data.mongodb.core.mapping.Document;
+import jakarta.persistence.*;
+import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Getter
 @Setter
-@Builder
-@Document(collection = "transactions")
+@Entity
+@EqualsAndHashCode
+@AllArgsConstructor
+@NoArgsConstructor
+@Table(name = "transacoes")
 public class TransactionEntity {
 
-    private String _id = UUID.randomUUID().toString();
-    private byte userAccountId;
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+    @Column(name = "cliente_id")
+    private byte clienteId;
+    @Column(name = "tipo")
     private char tipo;
+    @Column(name = "valor")
     private int valor;
+    @Column(name = "descricao")
     private String descricao;
-    private LocalDateTime dateTime;
+    @Column(name = "data_hora",
+            nullable = false,
+            columnDefinition = "TIMESTAMP")
+    private LocalDateTime dataHora;
 
 }

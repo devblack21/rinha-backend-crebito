@@ -3,7 +3,7 @@ package com.devblack21.rinha.backend.crebito.bdd.service;
 import com.devblack21.rinha.backend.crebito.bdd.core.TestContext;
 import com.devblack21.rinha.backend.crebito.controller.dto.ExtractResponse;
 import com.devblack21.rinha.backend.crebito.controller.dto.TransactionRequest;
-import com.devblack21.rinha.backend.crebito.controller.dto.TransactionResponse;
+import com.devblack21.rinha.backend.crebito.domain.EnvioTransacao;
 import org.springframework.http.*;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
@@ -19,14 +19,14 @@ import java.util.Map;
 @Component
 public class EventProducer {
 
-    private static final String URL = "http://localhost:20000/clientes";
+    private static final String URL = "http://localhost:20000";
 
     final RestTemplate restTemplate = new RestTemplate();
 
-    public TransactionResponse createUser(final TestContext testContext) {
+    public Map<String, Object> createUser(final TestContext testContext) {
 
         final UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromHttpUrl(URL);
-        uriComponentsBuilder.pathSegment("user");
+        uriComponentsBuilder.pathSegment("tech", "user");
         uriComponentsBuilder.queryParam("id", testContext.getUserId());
         uriComponentsBuilder.queryParam("saldo", testContext.getSaldo());
         uriComponentsBuilder.queryParam("limite", testContext.getLimite());
@@ -37,16 +37,16 @@ public class EventProducer {
 
         final HttpEntity<TransactionRequest> request = new HttpEntity<>(headers);
 
-        final ResponseEntity<TransactionResponse> response = restTemplate
-                .exchange(uriComponentsBuilder.build().toUriString(), HttpMethod.POST, request, TransactionResponse.class);
+        final ResponseEntity<Map> response = restTemplate
+                .exchange(uriComponentsBuilder.build().toUriString(), HttpMethod.POST, request, Map.class);
 
         return response.getBody();
     }
 
-    public void userDeleteAll() {
+    public void deleteAll() {
 
         final UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromHttpUrl(URL);
-        uriComponentsBuilder.pathSegment("user", "delete-all");
+        uriComponentsBuilder.pathSegment("tech", "delete-all");
 
         final HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -54,47 +54,31 @@ public class EventProducer {
 
         final HttpEntity<TransactionRequest> request = new HttpEntity<>(headers);
 
-        final ResponseEntity<TransactionResponse> response = restTemplate
-                .exchange(uriComponentsBuilder.build().toUriString(), HttpMethod.DELETE, request, TransactionResponse.class);
-
-    }
-
-    public void trasactionsDeleteAll() {
-
-        final UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromHttpUrl(URL);
-        uriComponentsBuilder.pathSegment("trasacoes", "delete-all");
-
-        final HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setAccept(List.of(MediaType.APPLICATION_JSON));
-
-        final HttpEntity<TransactionRequest> request = new HttpEntity<>(headers);
-
-        final ResponseEntity<TransactionResponse> response = restTemplate
-                .exchange(uriComponentsBuilder.build().toUriString(), HttpMethod.DELETE, request, TransactionResponse.class);
+        final ResponseEntity<EnvioTransacao> response = restTemplate
+                .exchange(uriComponentsBuilder.build().toUriString(), HttpMethod.DELETE, request, EnvioTransacao.class);
 
     }
 
     @Async
-    public ResponseEntity<TransactionResponse> postTransaction(final TestContext testContext) {
+    public ResponseEntity<EnvioTransacao> postTransaction(final TestContext testContext) {
 
         final RestTemplate restTemplate = new RestTemplate();
 
         final UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromHttpUrl(URL);
-        uriComponentsBuilder.pathSegment(String.valueOf(testContext.getUserId()), "transacoes");
+        uriComponentsBuilder.pathSegment("clientes", String.valueOf(testContext.getUserId()), "transacoes");
 
-        Map<String, Object> json = new HashMap<>();
+        final Map<String, Object> json = new HashMap<>();
         json.put("valor", testContext.getValor());
         json.put("tipo", testContext.getTipo());
         json.put("descricao", testContext.getDescricao());
 
         testContext.setTransactionRequest(json);
 
-        final HttpEntity<Map> request = new HttpEntity<>(json);
+        final HttpEntity<Map<String, Object>> request = new HttpEntity<>(json);
 
         try {
             return restTemplate
-                    .exchange(uriComponentsBuilder.build().toUriString(), HttpMethod.POST, request, TransactionResponse.class);
+                    .exchange(uriComponentsBuilder.build().toUriString(), HttpMethod.POST, request, EnvioTransacao.class);
         } catch (HttpStatusCodeException errorException) {
             return ResponseEntity.of(ProblemDetail.forStatusAndDetail(errorException.getStatusCode(), errorException.getMessage())).build();
         }
@@ -104,7 +88,7 @@ public class EventProducer {
     public ResponseEntity<ExtractResponse> getExtract(final TestContext testContext) {
 
         final UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.fromHttpUrl(URL);
-        uriComponentsBuilder.pathSegment(String.valueOf(testContext.getUserId()), "extrato");
+        uriComponentsBuilder.pathSegment("clientes", String.valueOf(testContext.getUserId()), "extrato");
 
         final HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);

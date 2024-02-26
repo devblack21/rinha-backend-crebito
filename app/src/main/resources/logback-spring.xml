@@ -13,6 +13,8 @@
     </appender>
 
     <logger name="org.hibernate.engine.internal.StatisticalLoggingSessionEventListener" level="OFF"/>
+    <logger name="org.hibernate.engine.jdbc.spi.SqlExceptionHelper" level="OFF"/>
+    <logger name="com.devblack21.rinha.backend.crebito.core.exception.NotLimitException" level="OFF"/>
 
     <root level="INFO">
         <appender-ref ref="CLOUDWATCH"/>

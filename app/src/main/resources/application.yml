@@ -1,17 +1,33 @@
-
 spring:
-  data:
-    mongodb:
-      host: localhost
-      port: 27017
-      database: rinha
-      username: user
-      password: user
-      authentication-database: admin
-
-  main:
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost:5433}/rinha
+    username: ${BD_USERNAME:postgres}
+    password: ${BD_PASSWORD:postgres}
+    max-active: ${MAX_POOL_CONNECTION:100}
+    min-active: ${MAX_POOL_CONNECTION:10}
+    hikari:
+      maximum-pool-size: ${MAX_POOL_CONNECTION:10}
+      minimum-pool-size: ${MAX_POOL_CONNECTION:100}
+    tomcat:
+      max-active: ${MAX_POOL_CONNECTION:100}
+  jpa:
+    show-sql: false
+    open-in-view: false
+    properties:
+      hibernate:
+        show_sql: false
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    driverClassName: org.postgresql.Driver
+main:
     allow-bean-definition-overriding: true
 
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: OFF
+  root: OFF
+
 server:
-  port: 20000
+  port: ${PORT:20000}
 
