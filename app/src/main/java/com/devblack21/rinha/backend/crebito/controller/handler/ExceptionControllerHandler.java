@@ -16,8 +16,8 @@ import java.util.*;
 @ControllerAdvice
 public class ExceptionControllerHandler {
 
-    @ExceptionHandler(SizeLimitExceededException.class)
-    public ResponseEntity<?> illegalArgumentExceptionHandler(final SizeLimitExceededException ex, WebRequest request) {
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<?> illegalArgumentExceptionHandler(final IllegalArgumentException ex, WebRequest request) {
 
         final Map<String, Object> errorObjectDTO = new HashMap<>();
 
@@ -50,7 +50,7 @@ public class ExceptionControllerHandler {
 
 
     @ExceptionHandler(ValidationException.class)
-    public ResponseEntity<?> illegalArgumentExceptionHandler(final ValidationException ex, WebRequest request) {
+    public ResponseEntity<?> inspectValidationExceptionHandler(final ValidationException ex, WebRequest request) {
 
         final Map<String, Object> errorObjectDTO = new HashMap<>();
 
