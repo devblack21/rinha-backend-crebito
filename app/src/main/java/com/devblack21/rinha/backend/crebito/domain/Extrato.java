@@ -73,15 +73,15 @@ public class Extrato {
         @Setter @JsonProperty("descricao") String descricao;
 
         @JsonProperty("realizado_em")
-        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
         LocalDateTime dataHora;
 
         @JsonCreator
         public Transaction(@JsonProperty("data_hora") final String dataHora) {
             if (Objects.nonNull(dataHora) && !dataHora.isEmpty()) {
-                final String data = dataHora.substring(0, 23);
-
-                final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");
+                final String data = dataHora.substring(0, 19);
+                //TODO: lógica de arredondamento do valor da data
+                final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
                 this.dataHora = LocalDateTime.parse(data, dtf);
             }
         }

@@ -13,22 +13,22 @@ services:
       - DB_HOST=postgres-db
       - PROFILE=local
       - PORT=20000
-      - JVM_XMS=140m
-      - JVM_XMX=220m
-      - CONTAINER_MEMORY=220m
+      - JVM_XMS=110m
+      - JVM_XMX=110m
+      - CONTAINER_MEMORY=110m
       - NEW_SIZE=5m
-      - MAX_NEW_SIZE=8m
-      - MIN_HEAP_FREE_RATIO=20
+      - MAX_NEW_SIZE=5m
+      - MIN_HEAP_FREE_RATIO=30
       - MAX_HEAP_FREE_RATIO=70
-      - MIN_POOL_CONNECTION=3
-      - MAX_POOL_CONNECTION=3
+      - MIN_POOL_CONNECTION=4
+      - MAX_POOL_CONNECTION=4
     depends_on:
       - postgres-db
     deploy:
       resources:
         limits:
-          cpus: "0.5"
-          memory: "232MB"
+          cpus: "0.6"
+          memory: "234MB"
 
   api02:
     <<: *api 
@@ -38,15 +38,15 @@ services:
       - DB_HOST=postgres-db
       - PORT=20000
       - PROFILE=local
-      - JVM_XMS=140m
-      - JVM_XMX=220m
+      - JVM_XMS=110m
+      - JVM_XMX=110m
       - NEW_SIZE=5m
-      - MAX_NEW_SIZE=8m
-      - CONTAINER_MEMORY=220m
-      - MIN_HEAP_FREE_RATIO=20
+      - MAX_NEW_SIZE=5m
+      - CONTAINER_MEMORY=110m
+      - MIN_HEAP_FREE_RATIO=30
       - MAX_HEAP_FREE_RATIO=70
-      - MIN_POOL_CONNECTION=3
-      - MAX_POOL_CONNECTION=3
+      - MIN_POOL_CONNECTION=4
+      - MAX_POOL_CONNECTION=4
 
   nginx:
     image: nginx:latest
@@ -62,8 +62,8 @@ services:
     deploy:
       resources:
         limits:
-          cpus: "0.2"
-          memory: "12MB"
+          cpus: "0.1"
+          memory: "15MB"
     networks:
       - default
         
@@ -74,8 +74,8 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.3'
-          memory: '74MB'
+          cpus: '0.2'
+          memory: '67MB'
     ports:
       - "5433:5432"
     volumes:
