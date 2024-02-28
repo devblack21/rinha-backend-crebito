@@ -13,8 +13,10 @@ import org.springframework.transaction.annotation.Transactional;
 public interface ClienteRepositoryImpl extends JpaRepository<ClienteEntity, Byte>, ClienteRepository {
 
     @Modifying
-    @Transactional(readOnly = false)
+    @Transactional()
     @Query("delete from ClienteEntity c where 1=1")
     void deleteAll();
 
+    @Override
+    ClienteEntity findById(final byte id);
 }

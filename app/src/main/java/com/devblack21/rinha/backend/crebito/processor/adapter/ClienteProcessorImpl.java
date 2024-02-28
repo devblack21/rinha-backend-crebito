@@ -13,9 +13,13 @@ import com.devblack21.rinha.backend.crebito.domain.EnvioTransacao;
 import com.devblack21.rinha.backend.crebito.repository.entity.ClienteEntity;
 import com.devblack21.rinha.backend.crebito.repository.entity.TransactionEntity;
 import com.fasterxml.jackson.databind.json.JsonMapper;
+import jakarta.persistence.LockModeType;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
@@ -73,16 +77,14 @@ public class ClienteProcessorImpl implements ClienteProcessor {
 
 
     @Override
-    @Transactional
+    @Lock(LockModeType.PESSIMISTIC_READ)
+    @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
     public ExtractResponse getExtract(byte id) {
-
-        final ClienteEntity clienteEntity = this.getClient(id);
-
-        final ExtractResponse.SaldoDTO saldoDTO = new ExtractResponse.SaldoDTO(clienteEntity.getSaldo(), LocalDateTime.now(), clienteEntity.getLimite());
 
         final List<ExtractResponse.TransactionDTO> transactionDTOS = new ArrayList<>();
 
         final List<TransactionEntity> transactionEntities = transacaoRepository.findTop10ByClienteIdOrderByDataHoraDesc(id);
+        final ClienteEntity clienteEntity = this.getClient(id);
 
         transactionEntities.forEach(transactionEntity ->
                 transactionDTOS.add(
@@ -90,6 +92,12 @@ public class ClienteProcessorImpl implements ClienteProcessor {
                 transactionEntity.getTipo(),
                 transactionEntity.getDescricao(),
                 transactionEntity.getDataHora()))
+        );
+
+        final ExtractResponse.SaldoDTO saldoDTO = new ExtractResponse.SaldoDTO(
+                clienteEntity.getSaldo(),
+                LocalDateTime.now(),
+                clienteEntity.getLimite()
         );
 
         return new ExtractResponse(saldoDTO, transactionDTOS);
