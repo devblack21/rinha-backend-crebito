@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.devblack21.rinha.backend</groupId>
 	<artifactId>crebito</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 	<name>crebito</name>
 	<description>Projeto feito para a rinha backend #2</description>
 
@@ -25,10 +25,10 @@
 			<artifactId>jackson-datatype-jsr310</artifactId>
 		</dependency>
 
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-actuator</artifactId>
-		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>org.springframework.boot</groupId>-->
+<!--			<artifactId>spring-boot-starter-actuator</artifactId>-->
+<!--		</dependency>-->
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -44,19 +44,20 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-logging</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-devtools</artifactId>
-			<scope>runtime</scope>
-			<optional>true</optional>
-		</dependency>
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
 		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -69,11 +70,11 @@
 			<version>1.10.0</version>
 		</dependency>
 
-		<dependency>
-			<groupId>io.github.devblack21</groupId>
-			<artifactId>logbit</artifactId>
-			<version>1.1.0</version>
-		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>io.github.devblack21</groupId>-->
+<!--			<artifactId>logbit</artifactId>-->
+<!--			<version>1.1.0</version>-->
+<!--		</dependency>-->
 
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>

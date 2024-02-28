@@ -4,10 +4,10 @@ spring:
     username: ${BD_USERNAME:postgres}
     password: ${BD_PASSWORD:postgres}
     max-active: ${MAX_POOL_CONNECTION:15}
-    min-active: ${MAX_POOL_CONNECTION:10}
+    min-active: ${MIN_POOL_CONNECTION:10}
     hikari:
       maximum-pool-size: ${MAX_POOL_CONNECTION:15}
-      minimum-pool-size: ${MAX_POOL_CONNECTION:10}
+      minimum-pool-size: ${MIN_POOL_CONNECTION:10}
     tomcat:
       max-active: ${MAX_POOL_CONNECTION:15}
   jpa:
@@ -30,4 +30,6 @@ logging:
 
 server:
   port: ${PORT:20000}
-
+  tomcat:
+    max-threads: ${MAX_POOL_CONNECTION:15}
+    max-connections: ${MAX_POOL_CONNECTION:15}

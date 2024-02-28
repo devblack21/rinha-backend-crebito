@@ -13,7 +13,6 @@ import com.devblack21.rinha.backend.crebito.domain.EnvioTransacao;
 import com.devblack21.rinha.backend.crebito.repository.entity.ClienteEntity;
 import com.devblack21.rinha.backend.crebito.repository.entity.TransactionEntity;
 import com.fasterxml.jackson.databind.json.JsonMapper;
-import io.github.devblack21.logging.LogBit;
 import lombok.RequiredArgsConstructor;
 import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.stereotype.Service;
@@ -66,13 +65,8 @@ public class ClienteProcessorImpl implements ClienteProcessor {
                     Character.toLowerCase(transactionRequest.tipo()),
                     transactionRequest.valor());
 
-            final EnvioTransacao envioTransacao = jsonMapper.readValue(result, EnvioTransacao.class);
-
-            LogBit.info("PROCESSOR", "Transação efetuada com sucesso!", envioTransacao);
-
-            return envioTransacao;
+            return jsonMapper.readValue(result, EnvioTransacao.class);
         } catch (final JpaSystemException exception) {
-            LogBit.error("PROCESSOR", "Não foi possivel efetuar a Transação!");
             throw new NotLimitException("O cliente não tem limite para executar essa transação.");
         }
     }

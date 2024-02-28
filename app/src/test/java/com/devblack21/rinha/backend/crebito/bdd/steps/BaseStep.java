@@ -11,10 +11,9 @@ import io.cucumber.java.pt.Dado;
 import io.cucumber.java.pt.E;
 import io.cucumber.java.pt.Entao;
 import io.cucumber.java.pt.Quando;
-import io.github.devblack21.logging.LogBit;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import org.apache.commons.lang3.StringUtils;
+import org.junit.platform.commons.util.StringUtils;
 import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
@@ -36,13 +35,10 @@ public class BaseStep {
         this.eventProducer.deleteAll();
         this.testContext.setUuid(UUID.randomUUID());
         this.testContext.setUserId(0);
-        LogBit.logInfoStart("BASE_STEP_INIT", "Inicializando BDD...",
-                testContext.getUuid());
     }
 
     @After
     public void after() {
-        LogBit.logInfoFinish("BASE_STEP_FINISH", "Finalizando BDD...");
     }
 
 

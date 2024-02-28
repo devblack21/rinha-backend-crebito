@@ -2,7 +2,9 @@ package com.devblack21.rinha.backend.crebito.repository.adapter;
 
 import com.devblack21.rinha.backend.crebito.core.repository.TransacaoRepository;
 import com.devblack21.rinha.backend.crebito.repository.entity.TransactionEntity;
+import jakarta.persistence.LockModeType;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -15,6 +17,7 @@ import java.util.List;
 @Transactional(readOnly = true)
 public interface TransacaoRepositoryImpl extends JpaRepository<TransactionEntity, Byte>, TransacaoRepository {
 
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
     List<TransactionEntity> findTop10ByClienteIdOrderByDataHoraDesc(final byte id);
 
     @Override

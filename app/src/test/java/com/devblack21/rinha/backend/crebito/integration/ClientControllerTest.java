@@ -11,9 +11,6 @@ import com.devblack21.rinha.backend.crebito.core.exception.ValidationRequestExce
 import com.devblack21.rinha.backend.crebito.core.processor.ClienteProcessor;
 import com.devblack21.rinha.backend.crebito.domain.EnvioTransacao;
 import com.fasterxml.jackson.databind.json.JsonMapper;
-import io.github.devblack21.logging.LogBit;
-import io.github.devblack21.logging.configuration.LogBitConfiguration;
-import io.github.devblack21.logging.enginer.DefaultEngineLogBit;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -53,10 +50,6 @@ public class ClientControllerTest {
                 .setControllerAdvice(new ExceptionControllerHandler())
                 .setMessageConverters(new MappingJackson2HttpMessageConverter())
                 .build();
-
-        LogBit.configure(new DefaultEngineLogBit(new LogBitConfiguration("",
-                "",
-                "")));
     }
 
     @Test
@@ -124,7 +117,7 @@ public class ClientControllerTest {
         this.mockMvc.perform(post("/clientes/1/transacoes")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new JsonMapper().writeValueAsString(json)))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isUnprocessableEntity());
     }
 
     @Test

@@ -10,10 +10,6 @@ import com.devblack21.rinha.backend.crebito.core.repository.TransacaoRepository;
 import com.devblack21.rinha.backend.crebito.processor.adapter.ClienteProcessorImpl;
 import com.devblack21.rinha.backend.crebito.repository.entity.ClienteEntity;
 import com.fasterxml.jackson.databind.json.JsonMapper;
-import io.github.devblack21.logging.LogBit;
-import io.github.devblack21.logging.configuration.LogBitConfiguration;
-import io.github.devblack21.logging.enginer.DefaultEngineLogBit;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -45,13 +41,6 @@ public class ClienteProcessorImplTest {
 
     @InjectMocks
     private ClienteProcessorImpl userAccountProcessor;
-
-    @Before
-    public void before() {
-        LogBit.configure(new DefaultEngineLogBit(new LogBitConfiguration("",
-                "",
-                "")));
-    }
 
     @Test
     public void shouldDebitoProcess() throws IOException {
