@@ -1,9 +1,5 @@
 package com.devblack21.rinha.backend.crebito.core.repository;
 
-import com.devblack21.rinha.backend.crebito.repository.entity.TransactionEntity;
-
-import java.util.List;
-
 public interface TransacaoRepository {
 
     String envioTransacao(final byte cliente,
@@ -11,7 +7,7 @@ public interface TransacaoRepository {
                                   final char tipo,
                                   final int valor);
 
-    List<TransactionEntity> findTop10ByClienteIdOrderByDataHoraDesc(final byte id);
+    String getTransacoes(final byte cliente);
 
     void deleteAll();
 }

@@ -1,9 +1,9 @@
 package com.devblack21.rinha.backend.crebito.controller;
 
-import com.devblack21.rinha.backend.crebito.controller.dto.ExtractResponse;
 import com.devblack21.rinha.backend.crebito.controller.dto.TransactionRequest;
 import com.devblack21.rinha.backend.crebito.core.processor.ClienteProcessor;
 import com.devblack21.rinha.backend.crebito.domain.EnvioTransacao;
+import com.devblack21.rinha.backend.crebito.domain.Extrato;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +25,7 @@ public class ClienteController {
     }
 
     @GetMapping("/{id}/extrato")
-    public ResponseEntity<ExtractResponse> get(final @PathVariable("id") byte id) {
+    public ResponseEntity<Extrato> get(final @PathVariable("id") byte id) throws IOException {
         return ResponseEntity.ok(clienteProcessor.getExtract(id));
     }
 

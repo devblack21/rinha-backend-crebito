@@ -58,3 +58,30 @@ BEGIN
     END IF;
 END;
 $$ LANGUAGE plpgsql;
+
+
+CREATE OR REPLACE FUNCTION public.get_transacoes(
+    id_cliente INT
+) RETURNS JSON AS
+$$
+DECLARE
+	cliente JSON;
+	transacoes JSON;
+BEGIN	
+	SELECT to_jsonb(c) INTO cliente FROM clientes as c WHERE c.id = id_cliente FOR UPDATE;
+   
+    IF cliente ISNULL THEN
+	  RAISE EXCEPTION 'Não existe um cliente com o id informado'; 
+    ELSE
+		SELECT jsonb_agg(to_jsonb(transacoes_by_user)) INTO transacoes
+		FROM (
+				SELECT * FROM transacoes AS t
+			  	WHERE t.cliente_id = id_cliente
+			  	ORDER BY t.data_hora DESC
+			    LIMIT 10 FOR UPDATE
+			 ) AS transacoes_by_user;
+		
+		RETURN json_build_object('saldo', cliente, 'transacoes', transacoes);
+    END IF;
+END;
+$$ LANGUAGE plpgsql;

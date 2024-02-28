@@ -24,6 +24,11 @@ public interface TransacaoRepositoryImpl extends JpaRepository<TransactionEntity
 
     @Override
     @Transactional(readOnly = false)
+    @Query(value = "select public.get_transacoes(:id_cliente)", nativeQuery = true)
+    String getTransacoes(@Param("id_cliente") final byte cliente);
+
+    @Override
+    @Transactional(readOnly = false)
     @Query(value = "select public.envio_transacao(:id_cliente,:descricao,:tipo,:valor)", nativeQuery = true)
     String envioTransacao(@Param("id_cliente") final byte cliente,
                                   @Param("descricao") final String descricao,
