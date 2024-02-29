@@ -20,8 +20,8 @@ services:
       - MAX_NEW_SIZE=5m
       - MIN_HEAP_FREE_RATIO=30
       - MAX_HEAP_FREE_RATIO=70
-      - MIN_POOL_CONNECTION=4
-      - MAX_POOL_CONNECTION=4
+      - MIN_POOL_CONNECTION=2
+      - MAX_POOL_CONNECTION=2
     depends_on:
       - postgres-db
     deploy:
@@ -45,8 +45,8 @@ services:
       - CONTAINER_MEMORY=110m
       - MIN_HEAP_FREE_RATIO=30
       - MAX_HEAP_FREE_RATIO=70
-      - MIN_POOL_CONNECTION=4
-      - MAX_POOL_CONNECTION=4
+      - MIN_POOL_CONNECTION=2
+      - MAX_POOL_CONNECTION=2
 
   nginx:
     image: nginx:latest

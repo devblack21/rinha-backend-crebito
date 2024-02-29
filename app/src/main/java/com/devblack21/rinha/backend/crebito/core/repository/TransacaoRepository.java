@@ -5,10 +5,9 @@ public interface TransacaoRepository {
     String envioTransacao(final byte cliente,
                                   final String descricao,
                                   final char tipo,
-                                  final int valor);
+                                  final long valor);
 
     String getTransacoes(final byte cliente);
-
-    void deleteAll();
+    
 }
 

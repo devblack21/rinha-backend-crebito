@@ -6,11 +6,9 @@ import com.devblack21.rinha.backend.crebito.core.exception.NotFoundException;
 import com.devblack21.rinha.backend.crebito.core.exception.NotLimitException;
 import com.devblack21.rinha.backend.crebito.core.exception.ValidationRequestException;
 import com.devblack21.rinha.backend.crebito.core.processor.ClienteProcessor;
-import com.devblack21.rinha.backend.crebito.core.repository.ClienteRepository;
 import com.devblack21.rinha.backend.crebito.core.repository.TransacaoRepository;
 import com.devblack21.rinha.backend.crebito.domain.EnvioTransacao;
 import com.devblack21.rinha.backend.crebito.domain.Extrato;
-import com.devblack21.rinha.backend.crebito.repository.entity.ClienteEntity;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.orm.jpa.JpaSystemException;
@@ -25,7 +23,6 @@ import java.util.Objects;
 public class ClienteProcessorImpl implements ClienteProcessor {
 
     private final AbstractValidator<TransactionRequest> transactionValidator;
-    private final ClienteRepository clienteRepository;
     private final TransacaoRepository transacaoRepository;
     private final JsonMapper jsonMapper;
 
@@ -37,29 +34,23 @@ public class ClienteProcessorImpl implements ClienteProcessor {
         }
     }
 
-    private ClienteEntity getClient(final byte id) {
-
-        final ClienteEntity clienteEntity = clienteRepository.findById(id);
-
-        if (Objects.isNull(clienteEntity)) {
-            throw new NotFoundException();
-        }
-
-        return clienteEntity;
-    }
-
     @Override
     @Transactional
     public EnvioTransacao saveTransaction(final TransactionRequest transactionRequest, byte id) throws IOException {
 
         this.validate(transactionRequest);
-        this.getClient(id);
 
         try {
-            return jsonMapper.readValue(transacaoRepository.envioTransacao(id,
+            final String jsonRawValue = transacaoRepository.envioTransacao(id,
                     transactionRequest.descricao(),
                     Character.toLowerCase(transactionRequest.tipo()),
-                    transactionRequest.valor()), EnvioTransacao.class);
+                    transactionRequest.valor());
+
+            if (Objects.isNull(jsonRawValue) || jsonRawValue.isEmpty()) {
+                throw new NotFoundException();
+            }
+
+            return jsonMapper.readValue(jsonRawValue, EnvioTransacao.class);
         } catch (final JpaSystemException exception) {
             throw new NotLimitException("O cliente não tem limite para executar essa transação.");
         }

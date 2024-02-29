@@ -6,20 +6,13 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.fasterxml.jackson.datatype.jsr310.deser.InstantDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @Configuration
 public class ApplicationConfig {
     @Bean
     public JsonMapper jsonMapper() {
-
         return JsonMapper.builder()
                 .disable(DeserializationFeature.ACCEPT_FLOAT_AS_INT)
                 .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)

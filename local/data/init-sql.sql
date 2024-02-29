@@ -18,6 +18,7 @@ CREATE UNLOGGED TABLE transacoes (
 );
 
 CREATE INDEX ON transacoes (cliente_id, data_hora DESC);
+CREATE UNIQUE INDEX ON clientes (id);
 
 
 INSERT INTO clientes(id, limite, saldo) VALUES 
@@ -38,10 +39,16 @@ $$
 DECLARE
     saldoAtual BIGINT;
     novoSaldo BIGINT;
+    id_c INT;
     l INT;
 BEGIN
+    SELECT id INTO id_c FROM clientes WHERE id = id_cliente;
     SELECT saldo INTO saldoAtual FROM clientes WHERE id = id_cliente FOR UPDATE;
     SELECT limite INTO l FROM clientes WHERE id = id_cliente;
+
+    IF id_c ISNULL THEN
+        RETURN id_c;
+    END IF;
 
     IF tipo = 'c' THEN
         novoSaldo := saldoAtual + valor;

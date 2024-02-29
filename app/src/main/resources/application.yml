@@ -3,11 +3,11 @@ spring:
     url: jdbc:postgresql://${DB_HOST:localhost:5433}/rinha
     username: ${BD_USERNAME:postgres}
     password: ${BD_PASSWORD:postgres}
-    max-active: ${MAX_POOL_CONNECTION:5}
-    min-active: ${MIN_POOL_CONNECTION:5}
+    max-active: ${MAX_POOL_CONNECTION:4}
+    min-active: ${MIN_POOL_CONNECTION:4}
     hikari:
-      maximum-pool-size: ${MAX_POOL_CONNECTION:5}
-      minimum-pool-size: ${MIN_POOL_CONNECTION:5}
+      maximum-pool-size: ${MAX_POOL_CONNECTION:4}
+      minimum-pool-size: ${MIN_POOL_CONNECTION:4}
     tomcat:
       max-active: ${MAX_POOL_CONNECTION:5}
   jpa:
@@ -31,5 +31,5 @@ logging:
 server:
   port: ${PORT:20000}
   tomcat:
-    max-threads: ${MAX_POOL_CONNECTION:5}
-    max-connections: ${MAX_POOL_CONNECTION:5}
+    max-threads: ${MAX_POOL_CONNECTION:4}
+    max-connections: ${MAX_POOL_CONNECTION:4}

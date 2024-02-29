@@ -20,7 +20,7 @@ public class TransactionValidator extends AbstractValidator<TransactionRequest> 
     public void rules() {
 
         ruleFor(TransactionRequest::valor)
-                .must(greaterThan(0))
+                .must(greaterThan(0L))
                 .withMessage("campo valor deve ser maior que 0")
                 .withFieldName("valor")
                 .critical();

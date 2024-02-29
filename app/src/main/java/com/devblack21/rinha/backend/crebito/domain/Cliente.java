@@ -10,7 +10,7 @@ import lombok.Setter;
 public class Cliente {
 
     private byte id;
-    private int saldo;
+    private long saldo;
     private int limite;
 
 }

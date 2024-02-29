@@ -15,7 +15,7 @@ public class EnvioTransacao {
 
    @JsonIgnore
    byte id;
-   @JsonProperty("saldo") int saldo;
+   @JsonProperty("saldo") long saldo;
    @JsonProperty("limite") int limite;
 
 }
