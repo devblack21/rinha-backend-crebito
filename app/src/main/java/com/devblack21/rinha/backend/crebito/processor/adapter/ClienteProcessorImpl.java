@@ -1,10 +1,8 @@
 package com.devblack21.rinha.backend.crebito.processor.adapter;
 
-import br.com.fluentvalidator.AbstractValidator;
 import com.devblack21.rinha.backend.crebito.controller.dto.TransactionRequest;
 import com.devblack21.rinha.backend.crebito.core.exception.NotFoundException;
 import com.devblack21.rinha.backend.crebito.core.exception.NotLimitException;
-import com.devblack21.rinha.backend.crebito.core.exception.ValidationRequestException;
 import com.devblack21.rinha.backend.crebito.core.processor.ClienteProcessor;
 import com.devblack21.rinha.backend.crebito.core.repository.TransacaoRepository;
 import com.devblack21.rinha.backend.crebito.domain.EnvioTransacao;
@@ -22,24 +20,12 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class ClienteProcessorImpl implements ClienteProcessor {
 
-    private final AbstractValidator<TransactionRequest> transactionValidator;
     private final TransacaoRepository transacaoRepository;
     private final JsonMapper jsonMapper;
-
-    private void validate(final TransactionRequest transactionRequest) {
-        var result = transactionValidator.validate(transactionRequest);
-
-        if (!result.isValid()) {
-            throw new ValidationRequestException(result);
-        }
-    }
 
     @Override
     @Transactional
     public EnvioTransacao saveTransaction(final TransactionRequest transactionRequest, byte id) throws IOException {
-
-        this.validate(transactionRequest);
-
         try {
             final String jsonRawValue = transacaoRepository.envioTransacao(id,
                     transactionRequest.descricao(),

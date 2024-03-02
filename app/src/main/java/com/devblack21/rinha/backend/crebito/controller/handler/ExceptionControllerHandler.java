@@ -1,6 +1,5 @@
 package com.devblack21.rinha.backend.crebito.controller.handler;
 
-import br.com.fluentvalidator.exception.ValidationException;
 import com.devblack21.rinha.backend.crebito.core.exception.NotFoundException;
 import com.devblack21.rinha.backend.crebito.core.exception.NotLimitException;
 import org.springframework.http.ResponseEntity;
@@ -32,11 +31,6 @@ public class ExceptionControllerHandler {
         return ResponseEntity.unprocessableEntity().build();
     }
 
-    @ExceptionHandler(ValidationException.class)
-    public ResponseEntity<?> inspectValidationExceptionHandler(final ValidationException ex, WebRequest request) {
-
-        return ResponseEntity.unprocessableEntity().build();
-    }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<?> inspectHttpMessageNotReadableException(final HttpMessageNotReadableException exception,
