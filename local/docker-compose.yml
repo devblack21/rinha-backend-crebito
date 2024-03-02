@@ -2,10 +2,7 @@ version: "3.9"
 services:
 
   api01: &api
-    build: 
-      context: ../app
-      dockerfile: Dockerfile
-    platform: linux/amd64
+    image: devblack21/rinha-backend-crebito:latest
     container_name: api01
     hostname: api01
     restart: on-failure
