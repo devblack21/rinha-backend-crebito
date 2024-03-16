@@ -9,7 +9,7 @@ spring:
       maximum-pool-size: ${MAX_POOL_CONNECTION:4}
       minimum-pool-size: ${MIN_POOL_CONNECTION:4}
     tomcat:
-      max-active: ${MAX_POOL_CONNECTION:5}
+      max-active: ${MAX_THREAD:5}
   jpa:
     show-sql: false
     open-in-view: false
@@ -31,5 +31,5 @@ logging:
 server:
   port: ${PORT:20000}
   tomcat:
-    max-threads: ${MAX_POOL_CONNECTION:4}
-    max-connections: ${MAX_POOL_CONNECTION:4}
+    max-threads: ${MAX_THREAD:4}
+    max-connections: ${MAX_THREAD:4}
